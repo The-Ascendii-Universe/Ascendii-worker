@@ -1,6 +1,17 @@
 // src/index.ts
 import { getAssetFromKV } from '@cloudflare/kv-asset-handler';
-
+return await getAssetFromKV(
+  { request, waitUntil: ctx.waitUntil.bind(ctx) },
+  {
+    ASSET_NAMESPACE: env.__STATIC_CONTENT, // ← add this line
+    mapRequestToAsset: (req: Request) => {
+      const parsed = new URL(req.url);
+      if (!parsed.pathname.includes('.') && !parsed.pathname.startsWith('/api')) {
+        return new Request(`${parsed.origin}/index.html`, { ...req });
+      }
+      return req;
+    },
+  }
 interface Env {
   ascendii_db: D1Database;
   ascendii_kv: KVNamespace;
