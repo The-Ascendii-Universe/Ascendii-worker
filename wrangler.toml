@@ -2,6 +2,21 @@ name = "ascendii-worker"
 main = "src/index.ts"
 compatibility_date = "2026-03-01"
 
+# Your existing bindings...
+[[d1_databases]]
+binding = "ascendii_db"
+database_name = "ascendii-db"
+database_id = "77f1af29-8186-4a8d-8952-f94bb0ec82de"
+
+[[kv_namespaces]]
+binding = "ascendii_kv"
+id = "79a1357dc6c74dd0bd7a2313481e6567"
+
+[site]
+bucket = "./dist"         
+main = "src/index.ts"
+compatibility_date = "2026-03-01"
+
 [[d1_databases]]
 binding = "ascendii_db"
 database_name = "ascendii-db"
