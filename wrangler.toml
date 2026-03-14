@@ -1,9 +1,9 @@
 name = "ascendii-frontend"
 compatibility_date = "2026-03-01"
-pages_build_output_dir = "./dist" # This fixes the deployment warning
+pages_build_output_dir = "dist"
 
-[vars]
-# Add any environment variables for your AI agents here
+[build]
+command = "npm run build"
 
 [[kv_namespaces]]
 binding = "ascendii_kv"
