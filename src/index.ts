@@ -1,40 +1,25 @@
-// Env interface for D1 and KV bindings
-export interface Env {
-    D1_BUCKET: D1Bucket;
-    KV_BUCKET: KVNamespace;
-}
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const { pathname } = new URL(request.url);
 
-// Handler to create a new action
-export const createHandle = async (request: Request, env: Env) => {
-    // Logic to create a new action
-};
-
-// Handler to submit a quest
-export const submitQuest = async (request: Request, env: Env) => {
-    // Logic to submit a quest
-};
-
-// Handler to get items
-export const getItems = async (request: Request, env: Env) => {
-    // Logic to get items
-};
-
-// Main fetch handler
-export default async (request: Request, env: Env) => {
-    const url = new URL(request.url);
-    switch (url.pathname) {
+    try {
+      switch (pathname) {
         case "/create":
-            return createHandle(request, env);
-        case "/submit":
-            return submitQuest(request, env);
-        case "/items":
-            return getItems(request, env);
-        default:
-            return new Response('Not Found', { status: 404 });
-    }
-};
+          if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+          return await createHandle(request, env);
 
-// Static asset serving logic
-export const serveStaticAssets = async (request: Request, env: Env) => {
-    // Logic for serving static assets
+        case "/submit":
+          return await submitQuest(request, env);
+
+        case "/items":
+          return await getItems(request, env);
+
+        default:
+          // Check if it's a static asset request before 404ing
+          return await serveStaticAssets(request, env);
+      }
+    } catch (e) {
+      return new Response(`Internal Error: ${e instanceof Error ? e.message : 'Unknown'}`, { status: 500 });
+    }
+  },
 };
