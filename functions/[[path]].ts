@@ -1,29 +1,23 @@
-interface Env {
-    D1_BUCKET: D1Bucket;
-    KV_BUCKET: KVNamespace;
-}
+export const onRequest = async (context) => {
+  const { request, env } = context;
 
-export const onRequest: PagesFunction<Env> = async (context) => {
-    const { request, env } = context;
-    const url = new URL(request.url);
-
-    // This is the "Wheel" that handles the data
+  try {
     if (request.method === "POST") {
-        try {
-            const body: any = await request.json();
-            const timestamp = new Date().toISOString();
-            
-            // Save the email to your KV storage
-            await env.KV_BUCKET.put(`signup:${url.pathname}:${timestamp}`, body.email);
-            
-            return new Response(JSON.stringify({ message: "Recorded in the archives." }), {
-                headers: { "Content-Type": "application/json" }
-            });
-        } catch (err) {
-            return new Response("Error processing request", { status: 500 });
-        }
-    }
+      const data = await request.json();
+      
+      // THIS MUST MATCH YOUR SCREENSHOT NAME: ascendii_kv
+      await env.ascendii_kv.put(`user_${Date.now()}`, data.email);
 
-    // If it's just a regular visit, let Cloudflare serve the index.html we just made
-    return next(); 
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  } catch (err) {
+    // This catches the exception so it doesn't crash the whole site
+    return new Response(JSON.stringify({ error: err.message }), { 
+      status: 500 
+    });
+  }
+
+  return context.next();
 };
