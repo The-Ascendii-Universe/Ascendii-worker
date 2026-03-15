@@ -1,12 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ascendii Universe | Solaris</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Monuments | Ascendii</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #020617; color: #f8fafc; font-family: 'Palatino', 'Georgia', serif; }
+        .monument-border { border: 1px solid #1e293b; background: linear-gradient(145deg, #0f172a, #020617); }
+        .gold-glow { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
+        .locked-overlay { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-6 md:p-12">
+
+    <header class="text-center max-w-2xl mb-16">
+        <h1 class="text-5xl md:text-6xl font-extrabold gold-glow mb-4">The Hall of Monuments</h1>
+        <p class="text-slate-400 italic text-lg uppercase tracking-widest">Pre-Alpha Preview</p>
+    </header>
+
+    <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+
+        <div class="monument-border p-8 rounded-xl relative overflow-hidden group">
+            <div class="absolute inset-0 locked-overlay flex flex-col items-center justify-center opacity-100 transition-opacity">
+                <span class="text-amber-500 font-bold tracking-tighter text-xs border border-amber-500 px-2 py-1 mb-2">LOCKED</span>
+                <p class="text-slate-300 text-sm italic">Feature in development</p>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">The Relic Room</h2>
+            <div class="h-40 bg-slate-900 rounded-lg flex items-center justify-center border border-slate-800">
+                <div class="text-4xl">💎</div>
+            </div>
+        </div>
+
+        <div class="monument-border p-8 rounded-xl ring-2 ring-amber-500/50 shadow-[0_0_30px_rgba(251,191,36,0.1)]">
+            <h2 class="text-2xl font-bold gold-glow mb-2">Enter the Archives</h2>
+            <p class="text-slate-400 text-sm mb-6">Secure your spot in the Hall of Monuments before the era ends.</p>
+            
+            <div class="space-y-4">
+                <input type="email" id="emailInput" placeholder="messenger@domain.com" 
+                    class="w-full bg-slate-900 border border-slate-700 p-3 rounded text-white focus:ring-2 focus:ring-amber-500 outline-none transition-all">
+                
+                <div class="flex flex-col gap-3">
+                    <button onclick="sendRequest('/waitlist')" 
+                        class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded shadow-lg transition-transform active:scale-95">
+                        Join Waitlist
+                    </button>
+                    <button onclick="sendRequest('/contribute')" 
+                        class="w-full border border-amber-600 text-amber-500 hover:bg-amber-600 hover:text-white font-bold py-3 rounded transition-colors">
+                        Become a Contributor
+                    </button>
+                </div>
+            </div>
+            <p id="msg" class="mt-4 text-center text-sm font-medium h-5 text-amber-400"></p>
+        </div>
+
+        <div class="monument-border p-8 rounded-xl relative overflow-hidden">
+            <div class="absolute inset-0 locked-overlay flex flex-col items-center justify-center">
+                <span class="text-amber-500 font-bold tracking-tighter text-xs border border-amber-500 px-2 py-1 mb-2">LOCKED</span>
+                <p class="text-slate-300 text-sm italic">Coming Soon</p>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">Scroll of Deeds</h2>
+            <div class="space-y-3">
+                <div class="h-4 bg-slate-800 rounded w-full"></div>
+                <div class="h-4 bg-slate-800 rounded w-3/4"></div>
+                <div class="h-4 bg-slate-800 rounded w-5/6"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-20 text-slate-500 text-sm uppercase tracking-[0.2em]">
+        Ascendii Universe &copy; 2026
+    </footer>
+
+    <script>
+        async function sendRequest(route) {
+            const email = document.getElementById('emailInput').value;
+            const msg = document.getElementById('msg');
+            
+            if (!email || !email.includes('@')) {
+                msg.innerText = "The scroll requires a valid email.";
+                return;
+            }
+
+            msg.innerText = "Engraving your name...";
+
+            try {
+                const response = await fetch(route, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, type: route })
+                });
+
+                if (response.ok) {
+                    msg.innerText = "Success. You are recorded.";
+                    document.getElementById('emailInput').value = "";
+                } else {
+                    msg.innerText = "The gates are heavy. Try again later.";
+                }
+            } catch (e) {
+                msg.innerText = "The connection to the Hall failed.";
+            }
+        }
+    </script>
+</body>
 </html>
