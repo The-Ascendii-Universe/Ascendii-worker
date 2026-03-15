@@ -1,5 +1,5 @@
 "scripts": {
   "dev": "vite",
-  "build": "mkdir -p dist && cp index.html dist/",
-  "deploy": "wrangler deploy"
+  "build": "vite build",
+  "preview": "vite preview"
 }
