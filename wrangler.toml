@@ -4,7 +4,7 @@ pages_build_output_dir = "dist"
 
 
 [[kv_namespaces]]
-binding = "ascendii_kv"
+binding = "Ascendii_kv"
 id = "79a1357dc6c74dd0bd7a2313481e6567"
 
 [[d1_databases]]
