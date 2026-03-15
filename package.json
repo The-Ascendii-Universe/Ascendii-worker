@@ -1,5 +1,3 @@
 "scripts": {
-  "dev": "vite",
-  "build": "mkdir -p dist && cp index.html dist/",
-  "preview": "vite preview"
+  "build": "mkdir -p dist && cp index.html dist/"
 }
