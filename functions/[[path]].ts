@@ -6,7 +6,7 @@ export const onRequest = async (context) => {
       const data = await request.json();
       
       // THIS MUST MATCH YOUR SCREENSHOT NAME: ascendii_kv
-      await env.ascendii_kv.put(`user_${Date.now()}`, data.email);
+      await env.Ascendii_kv.put(`user_${Date.now()}`, data.email);
 
       return new Response(JSON.stringify({ success: true }), {
         headers: { "Content-Type": "application/json" }
